@@ -1,0 +1,255 @@
+{
+	"info": {
+		"_postman_id": "6de30c60-c2f7-4ca0-9c7e-2c9045befa39",
+		"name": "TL ExpressJS Workshop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all tracks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/tracks/all?pageSize=10&pageNumber=1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tracks",
+						"all"
+					],
+					"query": [
+						{
+							"key": "pageSize",
+							"value": "10"
+						},
+						{
+							"key": "pageNumber",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get track info by Track ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/tracks/get-track-info/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tracks",
+						"get-track-info",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get favorite playlists and tracks by Customer ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/customer/1/get-favorite",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"customer",
+						"1",
+						"get-favorite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get favorite tracks by Customer ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/customer/1/get-favorite-tracks",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"customer",
+						"1",
+						"get-favorite-tracks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post - Add favorite track",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/customer/1/add-favorite-track/8",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"customer",
+						"1",
+						"add-favorite-track",
+						"8"
+					]
+				},
+				"description": "POST - /customer/:customerId/add-favorite-track/:trackId\nReturns 204 if successful.\nIf it has been liked before, also return 204 without error."
+			},
+			"response": []
+		},
+		{
+			"name": "Update unit price by track ID",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"new_price\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/admin/update-price/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"update-price",
+						"1"
+					]
+				},
+				"description": "POST - /customer/:customerId/add-favorite-track/:trackId\nReturns 204 if successful.\nIf it has been liked before, also return 204 without error."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete track by Track ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/admin/remove-track/80",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"admin",
+						"remove-track",
+						"80"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[External] Get lyrics from http://api.chartlyrics.com/",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://api.chartlyrics.com/apiv1.asmx/SearchLyricDirect?artist=Audioslave&song=Be Yourself",
+					"protocol": "http",
+					"host": [
+						"api",
+						"chartlyrics",
+						"com"
+					],
+					"path": [
+						"apiv1.asmx",
+						"SearchLyricDirect"
+					],
+					"query": [
+						{
+							"key": "artist",
+							"value": "Audioslave"
+						},
+						{
+							"key": "song",
+							"value": "Be Yourself"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Lyric by Track ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/tracks/get-track-lyrics/200",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tracks",
+						"get-track-lyrics",
+						"200"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get static file",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/static/dog.png",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"static",
+						"dog.png"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
