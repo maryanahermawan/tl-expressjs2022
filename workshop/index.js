@@ -115,17 +115,18 @@ app.post('/customer/:customerId/add-favorite-track/:trackId', (req, res, next) =
           res.status(204).send();
         }
       })
-      .run();
+      .run( // TODO
+      );
   });
 });
 
 app.delete('/admin/remove-track/:trackId', (req, res, next) => {
-
+  // TODO
 });
 
 // update-price accepts req.body.new_price
 app.patch('/admin/update-price/:trackId', (req, res, next) => {
-
+  // TODO
 });
 
 app.get('/tracks/get-track-info/:trackId',
@@ -151,11 +152,12 @@ const requirePagination = (req, res, next) => {
 };
 
 app.get('/tracks/all'
+  //TODO
 );
 
 app.get('/tracks/get-track-lyrics/:trackId',
   (req, res, next) => {
-
+    // TODO
   }
 );
 
