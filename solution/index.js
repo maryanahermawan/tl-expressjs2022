@@ -107,26 +107,32 @@ app.get('/customer/:customerId/get-favorite-tracks',
   }
 );
 
-app.post('/customer/:customerId/add-favorite-track/:trackId', (req, res, next) => {
+const checkCustExist = (req, res, next) => {
+  db
+    // check if there is no customer with this ID, return error status 404 Not Found
+    .get(CHECK_CUST_EXISTS, [req.params.customerId], (err, customer) => {
+      if (err) {
+        return next(err);
+      }
+      if (!customer) {
+        return res.status(404).send('Customer ID is invalid!');
+      }
+      next();
+    });
+};
 
-  db.serialize(() => {
+const checkTrackIsLiked = (req, res, next) => {
+  db.get(CHECK_TRACK_LIKE_EXISTS, [req.params.customerId, req.params.trackId], (err, like) => {
+    if (like) {
+      return res.status(204).send();
+    }
+    next();
+  });
+};
+
+app.post('/customer/:customerId/add-favorite-track/:trackId', checkCustExist, checkTrackIsLiked,
+  (req, res, next) => {
     db
-      // check if there is no customer with this ID, return error status 404 Not Found
-      .get(CHECK_CUST_EXISTS, [req.params.customerId], (err, customer) => {
-        if (err) {
-          return next(err);
-        }
-        if (!customer) {
-          res.status(404).send('Customer ID is invalid!');
-        }
-      })
-      // If customer is found, check if s/he has liked this track before
-      // if yes return 204 without executing SQL insert
-      .get(CHECK_TRACK_LIKE_EXISTS, [req.params.customerId, req.params.trackId], (err, like) => {
-        if (like) {
-          res.status(204).send();
-        }
-      })
       .run(ADD_FAVORITE_TRACK, [req.params.customerId, req.params.trackId], (err) => {
         if (err) {
           return next(err);
@@ -135,52 +141,39 @@ app.post('/customer/:customerId/add-favorite-track/:trackId', (req, res, next) =
         }
       });
   });
-});
 
-app.delete('/admin/remove-track/:trackId', (req, res, next) => {
+const checkTrackExists = (req, res, next) => {
+  db
+    // check if there is no track with ID return error status 404 Not Found
+    .get(CHECK_TRACK_EXISTS, [req.params.trackId], (err, track) => {
+      if (err) {
+        return next(err);
+      }
+      if (!track) {
+        return res.status(404).send('Track ID is invalid!');
+      }
+      next();
+    });
+};
 
-  db.serialize(() => {
-    db
-      // check if there is no track with ID return error status 404 Not Found
-      .get(CHECK_TRACK_EXISTS, [req.params.trackId], (err, track) => {
-        if (err) {
-          return next(err);
-        }
-        if (!track) {
-          res.status(404).send('Track ID is invalid!');
-        }
-      })
-      .run(DELETE_TRACK_BY_TRACK_ID, [req.params.trackId], (err) => {
-        if (err) {
-          return next(err);
-        } else {
-          res.status(200).send();
-        }
-      });
+app.delete('/admin/remove-track/:trackId', checkTrackExists, (req, res, next) => {
+  db.run(DELETE_TRACK_BY_TRACK_ID, [req.params.trackId], (err) => {
+    if (err) {
+      return next(err);
+    } else {
+      res.status(200).send();
+    }
   });
-
 });
 
-app.patch('/admin/update-price/:trackId', (req, res, next) => {
+app.patch('/admin/update-price/:trackId', checkTrackExists, (req, res, next) => {
   const { new_price } = req.body;
-  db.serialize(() => {
-    db
-      // check if there is no track with ID return error status 404 Not Found
-      .get(CHECK_TRACK_EXISTS, [req.params.trackId], (err, track) => {
-        if (err) {
-          return next(err);
-        }
-        if (!track) {
-          return res.status(404).send('Track ID is invalid!');
-        }
-      })
-      .run(UPDATE_TRACK_PRICE, [new_price, req.params.trackId], (err) => {
-        if (err) {
-          return next(err);
-        } else {
-          res.status(200).send();
-        }
-      });
+  db.run(UPDATE_TRACK_PRICE, [new_price, req.params.trackId], (err) => {
+    if (err) {
+      return next(err);
+    } else {
+      res.status(200).send();
+    }
   });
 });
 

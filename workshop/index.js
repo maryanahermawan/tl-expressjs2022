@@ -97,27 +97,6 @@ app.get('/customer/:customerId/get-favorite-tracks',
 
 app.post('/customer/:customerId/add-favorite-track/:trackId', (req, res, next) => {
 
-  db.serialize(() => {
-    db
-      // check if there is no customer with this ID, return error status 404 Not Found
-      .get(CHECK_CUST_EXISTS, [req.params.customerId], (err, customer) => {
-        if (err) {
-          return next(err);
-        }
-        if (!customer) {
-          res.status(404).send('Customer ID is invalid!');
-        }
-      })
-      // If customer is found, check if s/he has liked this track before
-      // if yes return 204 without executing SQL insert
-      .get(CHECK_TRACK_LIKE_EXISTS, [req.params.customerId, req.params.trackId], (err, like) => {
-        if (like) {
-          res.status(204).send();
-        }
-      })
-      .run( // TODO
-      );
-  });
 });
 
 app.delete('/admin/remove-track/:trackId', (req, res, next) => {
